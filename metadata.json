@@ -1,0 +1,6 @@
+{
+  "name": "摸鱼羽毛球 (Slack Badminton)",
+  "description": "A minimalist, physics-based badminton juggling game designed for office workers to take a quick break. Features free and timed modes, responsive mouse-controlled racket, and performance analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
