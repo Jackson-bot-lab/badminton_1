@@ -73,7 +73,8 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
     combo: 0,
     particles: [] as Particle[],
     dimensions: { width: 800, height: 600 },
-    currentLevel: 1
+    currentLevel: 1,
+    timeLeft: mode === 'timed' ? 60 : 0,
   });
 
   useEffect(() => {
@@ -164,10 +165,14 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
     // Determine current level logic for timed mode
     if (mode === 'timed') {
       let level = 1;
-      if (timeLeft <= 45) level = 2; // Level 2: introduces red shuttlecocks and requires backhand
-      if (timeLeft <= 30) level = 3; // Level 3: 2 shuttlecocks simultaneously
-      if (timeLeft <= 15) level = 4; // Level 4: 3 shuttlecocks simultaneously
-      state.currentLevel = level;
+      if (state.timeLeft <= 45) level = 2; // Level 2: introduces red shuttlecocks and requires backhand
+      if (state.timeLeft <= 30) level = 3; // Level 3: 2 shuttlecocks simultaneously
+      if (state.timeLeft <= 15) level = 4; // Level 4: 3 shuttlecocks simultaneously
+      
+      if (state.currentLevel !== level) {
+         createParticles(dim.width / 2, dim.height / 3, `LEVEL ${level}!`, '#fbbf24');
+         state.currentLevel = level;
+      }
 
       const targetShuttles = level <= 2 ? 1 : level === 3 ? 2 : 3;
       while (state.shuttlecocks.length < targetShuttles) {
@@ -493,6 +498,7 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
             endGame();
             return 0;
           }
+          gameState.current.timeLeft = t - 1;
           return t - 1;
         });
       }, 1000);
