@@ -57,12 +57,17 @@ export default function ResultsPanel({ stats, onRetry, onHome }: ResultsPanelPro
   }, [stats]);
 
   const levelText = React.useMemo(() => {
-    if (stats.maxCombo > 50) return 'P9 首席架构师 (国家级)';
-    if (stats.maxCombo > 30) return 'P7 资深专家 (市级代表)';
-    if (stats.maxCombo > 15) return 'P5 高级工程师 (俱乐部老手)';
-    if (stats.maxCombo > 5) return 'P3 初级开发 (公园大爷)';
-    return '实习生 (初入茅庐)';
-  }, [stats.maxCombo]);
+    const isFlawless = stats.drops === 0;
+    const isHighCombo = stats.maxCombo >= 30;
+    const isSuperCombo = stats.maxCombo >= 50;
+
+    if (stats.score >= 120 && isFlawless) return 'P10 研发副总裁 (封神)';
+    if (stats.score >= 80 && isSuperCombo) return 'P9 首席安全官 (绝对防御)';
+    if (stats.maxCombo > 30 || stats.score >= 50) return 'P7 资深专家 (业务骨干)';
+    if (stats.maxCombo > 15 || stats.score >= 20) return 'P5 高级工程师 (熟练工)';
+    if (stats.maxCombo > 5 || stats.score >= 5) return 'P3 初级开发 (实习转正)';
+    return '外包/实习生 (初入茅庐)';
+  }, [stats.maxCombo, stats.score, stats.drops]);
 
   return (
     <div className="w-full bg-[#0A0A0A] border flex flex-col md:flex-row border-white/10 shadow-2xl text-white font-sans">
@@ -74,10 +79,15 @@ export default function ResultsPanel({ stats, onRetry, onHome }: ResultsPanelPro
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-[#CCFF00]">数据分析</h1>
           </div>
           
+          <div className="flex flex-col mb-10 border-l-4 border-[#CCFF00] pl-6 py-2 bg-gradient-to-r from-[#CCFF00]/10 to-transparent">
+              <span className="text-6xl md:text-7xl font-black italic tracking-tighter text-[#CCFF00] drop-shadow-[0_0_15px_rgba(204,255,0,0.3)]">{stats.score}</span>
+              <span className="text-[12px] font-bold text-white/70 tracking-widest uppercase mt-2">综合评定得分 (Total Score)</span>
+          </div>
+
           <div className="grid grid-cols-2 gap-y-12 gap-x-8 mb-auto">
             <div className="flex flex-col">
               <span className="text-4xl md:text-5xl font-black italic tracking-tighter">{stats.hits}</span>
-              <span className="text-[10px] font-bold text-[#CCFF00] tracking-widest uppercase mt-2">完全有效接触数</span>
+              <span className="text-[10px] font-bold text-white/50 tracking-widest uppercase mt-2">完全有效接触数</span>
             </div>
             <div className="flex flex-col">
               <span className="text-4xl md:text-5xl font-black italic tracking-tighter text-white">{stats.maxCombo}</span>

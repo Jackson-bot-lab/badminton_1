@@ -1,6 +1,7 @@
 export type GameMode = 'free' | 'timed';
 
 export interface GameStats {
+  score: number;
   hits: number;
   maxCombo: number;
   duration: number;
@@ -12,6 +13,7 @@ export interface GameStats {
 }
 
 export const INITIAL_STATS: GameStats = {
+  score: 0,
   hits: 0,
   maxCombo: 0,
   duration: 0,

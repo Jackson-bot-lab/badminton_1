@@ -51,6 +51,7 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
   const [timeLeft, setTimeLeft] = useState(mode === 'timed' ? 60 : 0);
   const [score, setScore] = useState(0);
   const [combo, setCombo] = useState(0);
+  const [uiLevel, setUiLevel] = useState(1);
 
   // Mutable game state to avoid dependency issues in animation loop
   const gameState = useRef({
@@ -172,9 +173,10 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
       if (state.currentLevel !== level) {
          createParticles(dim.width / 2, dim.height / 3, `LEVEL ${level}!`, '#fbbf24');
          state.currentLevel = level;
+         setUiLevel(level);
       }
 
-      const targetShuttles = level <= 2 ? 1 : level === 3 ? 2 : 3;
+      const targetShuttles = level <= 2 ? 1 : level === 3 ? 2 : 4;
       while (state.shuttlecocks.length < targetShuttles) {
          state.shuttlecocks.push({
            id: Math.random(), 
@@ -193,9 +195,11 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
 
     if (r.swingTimer > 0) r.swingTimer--;
 
+    const currentGravity = state.currentLevel === 4 ? 0.35 : GRAVITY;
+
     state.shuttlecocks.forEach(s => {
       // Apply gravity & drag to shuttlecock
-      s.vy += GRAVITY;
+      s.vy += currentGravity;
       
       // Asymmetric drag: falls straight down eventually like a real shuttlecock
       s.vx *= AIR_RESISTANCE; 
@@ -249,7 +253,7 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
             }
             state.lastHitTime = hitTime;
             
-            const isPerfect = Math.abs(s.x - r.x) < 15;
+            const isPerfect = Math.abs(s.x - r.x) < 25;
             if (isPerfect) {
                state.score += 2;
                createParticles(s.x, s.y, "PERFECT!", "#CCFF00");
@@ -521,6 +525,7 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
     if (requestRef.current) cancelAnimationFrame(requestRef.current);
     const state = gameState.current;
     const finalStats: GameStats = {
+      score: state.score,
       hits: state.stats.hits,
       maxCombo: state.stats.maxCombo,
       duration: mode === 'timed' ? 60 : Math.floor((Date.now() - state.startTime) / 1000),
@@ -549,12 +554,20 @@ export default function BadmintonGame({ mode, onGameOver, onBack }: BadmintonGam
 
       <div className="absolute top-6 right-6 md:top-10 md:right-10 flex flex-col items-end gap-2 z-10">
            {mode === 'timed' && (
-             <div className="px-4 py-2 bg-black/50 border border-white/20 backdrop-blur-md text-right mb-2">
-               <p className="text-[10px] text-white/50 uppercase font-bold tracking-widest">剩余时间</p>
-               <p className={`text-2xl md:text-3xl font-black italic tracking-tighter ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-[#CCFF00]'}`}>
-                 {timeLeft}s
-               </p>
-             </div>
+             <>
+               <div className="px-4 py-2 bg-[#CCFF00]/10 border border-[#CCFF00]/20 backdrop-blur-md text-right mb-2 shadow-[0_0_10px_rgba(204,255,0,0.1)]">
+                 <p className="text-[10px] text-[#CCFF00]/80 uppercase font-bold tracking-widest">当前难度</p>
+                 <p className="text-xl md:text-2xl font-black italic tracking-tighter text-[#CCFF00]">
+                   LV {uiLevel}
+                 </p>
+               </div>
+               <div className="px-4 py-2 bg-black/50 border border-white/20 backdrop-blur-md text-right mb-2">
+                 <p className="text-[10px] text-white/50 uppercase font-bold tracking-widest">剩余时间</p>
+                 <p className={`text-2xl md:text-3xl font-black italic tracking-tighter ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : 'text-[#CCFF00]'}`}>
+                   {timeLeft}s
+                 </p>
+               </div>
+             </>
            )}
            <button 
              onClick={endGame}

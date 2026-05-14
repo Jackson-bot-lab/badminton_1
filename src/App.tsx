@@ -42,8 +42,8 @@ export default function App() {
       {/* Header: Corporate Athlete Dashboard */}
       <header className="h-16 md:h-20 shrink-0 border-b border-white/10 flex items-center justify-between px-4 md:px-10 bg-[#0F0F0F] z-20 relative">
         <div className="flex items-baseline gap-4">
-          <h1 className="text-2xl md:text-3xl font-black tracking-tighter uppercase italic text-[#CCFF00]">ShuttleFlow.v2</h1>
-          <span className="hidden md:inline text-[10px] tracking-[0.2em] font-bold text-white/40 uppercase">职场表现监测接口</span>
+          <h1 className="text-2xl md:text-3xl font-black tracking-tighter uppercase italic text-[#CCFF00]">TouchFish.OS</h1>
+          <span className="hidden md:inline text-[10px] tracking-[0.2em] font-bold text-white/40 uppercase">带薪颠球评估系统</span>
         </div>
         <div className="flex gap-4 md:gap-8 items-center font-mono text-xs">
           <div className="flex flex-col items-end">
@@ -64,18 +64,18 @@ export default function App() {
           {/* Sidebar Menu */}
           <aside className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-white/10 p-6 md:p-8 flex flex-col bg-[#0F0F0F] z-10 shrink-0">
              <h2 className="text-[10px] tracking-[0.3em] font-bold text-white/30 uppercase mb-8">系统模式</h2>
-             <div className="space-y-4">
-               <button
-                 onClick={() => startGame('free')}
-                 className="w-full py-4 border border-[#CCFF00] text-[#CCFF00] text-sm font-black uppercase tracking-widest hover:bg-[#CCFF00] hover:text-black transition-all flex items-center justify-center gap-2"
-               >
-                 <Play size={16} /> 自由摸鱼模式
-               </button>
+             <div className="space-y-4 flex flex-col">
                <button
                  onClick={() => startGame('timed')}
-                 className="w-full py-4 bg-white text-black text-sm font-black uppercase tracking-widest hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                 className="w-full py-4 bg-[#CCFF00] text-black text-sm font-black uppercase tracking-widest hover:bg-white transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(204,255,0,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] order-1"
                >
-                 <Timer size={16} /> 60秒敏捷测试
+                 <Timer size={16} /> 职级晋升抗压战 (60s)
+               </button>
+               <button
+                 onClick={() => startGame('free')}
+                 className="w-full py-4 border border-white/20 text-white/70 text-sm font-black uppercase tracking-widest hover:bg-white/10 hover:text-white transition-all flex items-center justify-center gap-2 order-2"
+               >
+                 <Play size={16} /> 无尽自由摸鱼模式
                </button>
              </div>
              
@@ -94,17 +94,34 @@ export default function App() {
           <section className="flex-1 relative bg-[radial-gradient(circle_at_center,_#1A1A1A_0%,_#0A0A0A_100%)] flex items-center justify-center overflow-hidden">
             <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'linear-gradient(#FFF 1px, transparent 1px), linear-gradient(90deg, #FFF 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
             
-            <div className="flex flex-col items-center pointer-events-none z-10">
-              <span className="text-[120px] md:text-[240px] font-black leading-none tracking-tighter opacity-10 italic">084</span>
-              <span className="text-[10px] md:text-xs tracking-[0.5em] font-bold uppercase -mt-4 md:-mt-8 opacity-20">连续颠球分析流</span>
-            </div>
-            
-            {/* Shuttlecock Visualization Placeholder */}
-            <div className="absolute top-1/4 left-1/2 -translate-x-1/2 opacity-30">
-              <div className="w-12 h-16 border-2 border-white rounded-t-full relative">
-                <div className="absolute bottom-0 w-full h-1/3 bg-white"></div>
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-[2px] h-4 bg-white/20"></div>
-              </div>
+            <div className="flex flex-col items-center z-10 relative pointer-events-none">
+               {/* Animated rotating outer rings */}
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-[1px] border-white/20 rounded-full animate-[spin_10s_linear_infinite]"></div>
+               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border-[2px] border-dashed border-[#CCFF00]/30 rounded-full animate-[spin_8s_linear_infinite_reverse]"></div>
+               
+               {/* Bouncing Shuttle */}
+               <div className="w-16 h-20 animate-bounce z-20 mb-8 opacity-90 drop-shadow-[0_0_15px_rgba(255,255,255,0.5)]">
+                 <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible">
+                   {/* Feathers outline */}
+                   <polygon points="20,20 80,20 60,70 40,70" fill="transparent" stroke="white" strokeWidth="4" strokeLinejoin="round" />
+                   {/* Inner feather lines */}
+                   <line x1="35" y1="20" x2="47" y2="70" stroke="white" strokeWidth="2" />
+                   <line x1="50" y1="20" x2="50" y2="70" stroke="white" strokeWidth="2" />
+                   <line x1="65" y1="20" x2="53" y2="70" stroke="white" strokeWidth="2" />
+                   {/* Strings / Bands */}
+                   <line x1="26" y1="38" x2="74" y2="38" stroke="white" strokeWidth="2" />
+                   <line x1="33" y1="54" x2="67" y2="54" stroke="white" strokeWidth="2" />
+                   {/* Cork */}
+                   <path d="M 38 70 C 38 85, 62 85, 62 70 Z" fill="#CCFF00" />
+                 </svg>
+               </div>
+
+               <span className="text-[60px] md:text-[90px] font-black leading-none tracking-tighter italic text-transparent bg-clip-text bg-gradient-to-b from-white to-white/40 z-20 drop-shadow-[0_0_15px_rgba(204,255,0,0.1)]">
+                 MOYU.EXE
+               </span>
+               <span className="text-[10px] md:text-xs tracking-[0.5em] font-bold uppercase mt-2 text-[#CCFF00] animate-pulse z-20">
+                 防暂离协议激活 / System Ready
+               </span>
             </div>
           </section>
         </div>
